@@ -23,6 +23,8 @@ const month = (m) => (LANG === 'en' && m ? EN.months[m] : m);
 
 const PRESS_BY_ID = Object.fromEntries(PRESS.map((p) => [p.id, p]));
 for (const w of WORKS) for (const id of w.press) PRESS_BY_ID[id].work = w;
+// Публикации на странице спектакля — по дате
+for (const w of WORKS) w.press.sort((x, y) => PRESS_BY_ID[x].date.localeCompare(PRESS_BY_ID[y].date));
 
 function pressDate(p) {
   const label = pf(p, 'dateLabel');
