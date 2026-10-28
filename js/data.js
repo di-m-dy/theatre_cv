@@ -341,7 +341,8 @@ const WORKS = [
     gallery: pressPhotos('vzlomanny', 6), gallerySource: 'Фото из публикации «Культуры Екатеринбурга»',
     press: ['ke-vzlomanny'] },
   { slug: '1987', title: '1987', year: 2016, theatre: YC, author: 'Ирина Васьковская', team: [['Художник', 'Владимир Кравцев']],
-    gallery: pressPhotos('1987', 2), gallerySource: 'Фото из публикации «Петербургского театрального журнала»',
+    videos: [{ id: '9tO0ab7UApw' }],
+    gallery: [...pressPhotos('1987', 2), ...frames('1987')], gallerySource: 'Фото из публикации «Петербургского театрального журнала» и кадры из видеозаписи',
     press: ['ptj-1987'] },
 
   // ---- ЕГТИ
