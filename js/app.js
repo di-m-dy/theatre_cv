@@ -90,6 +90,54 @@ function renderChrome(section, path) {
 
 /* ---------- Карточки ---------- */
 
+/* ---------- Поиск ---------- */
+
+// Нормализация для поиска: регистр, ё/е, кавычки и знаки не важны
+const norm = (s = '') => String(s).toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+const workKeys = (w) => [w.title, w.subtitle, EN.works[w.slug] && EN.works[w.slug].title, EN.works[w.slug] && EN.works[w.slug].subtitle];
+const searchText = {
+  work: (w) => norm(workKeys(w).filter(Boolean).join(' ')),
+  press: (p) => norm([p.title, p.about, EN.press[p.id] && EN.press[p.id].title, EN.press[p.id] && EN.press[p.id].about,
+    ...(p.work ? workKeys(p.work) : [])].filter(Boolean).join(' ')),
+};
+// Запрос живёт, пока открыт сайт: вернулись из спектакля — фильтр на месте
+const searchQuery = { works: '', press: '' };
+
+function searchBox(kind, placeholder) {
+  return `
+    <label class="search mono">
+      <span class="search-mark" aria-hidden="true">[</span>
+      <input type="search" data-search="${kind}" value="${esc(searchQuery[kind])}" placeholder="${esc(placeholder)}" aria-label="${esc(placeholder)}" autocomplete="off" spellcheck="false">
+      <span class="search-mark" aria-hidden="true">]</span>
+    </label>`;
+}
+
+// Скрывает несовпавшие элементы [data-q], пустые группы [data-q-group] и показывает «ничего не найдено»
+function applySearch(kind) {
+  const q = norm(searchQuery[kind]);
+  let shown = 0;
+  app.querySelectorAll('[data-q]').forEach((el) => {
+    const hit = !q || q.split(' ').every((t) => el.dataset.q.includes(t));
+    el.hidden = !hit;
+    shown += hit;
+  });
+  app.querySelectorAll('[data-q-group]').forEach((g) => (g.hidden = !g.querySelector('[data-q]:not([hidden])')));
+  const empty = app.querySelector('.search-empty');
+  if (empty) empty.hidden = shown > 0;
+}
+
+function bindSearch() {
+  const input = app.querySelector('[data-search]');
+  if (!input) return;
+  const kind = input.dataset.search;
+  input.addEventListener('input', () => {
+    searchQuery[kind] = input.value;
+    applySearch(kind);
+  });
+  input.addEventListener('keydown', (e) => e.key === 'Escape' && input.value && ((input.value = ''), input.dispatchEvent(new Event('input'))));
+  applySearch(kind);
+}
+
 function workCard(w) {
   const m = U().marks;
   const marks = [
@@ -102,7 +150,7 @@ function workCard(w) {
     ? `<img src="${w.cover}" alt="" loading="lazy">${w.videos.length ? '<span class="card-play" aria-hidden="true"></span>' : ''}`
     : `<span class="card-type">${esc(title)}</span>`;
   return `
-    <a class="card" href="${L(`works/${w.slug}`)}">
+    <a class="card" href="${L(`works/${w.slug}`)}" data-q="${esc(searchText.work(w))}">
       <div class="card-media${w.cover ? '' : ' is-text'}">${media}</div>
       <div class="card-body">
         <span class="mono muted">${w.year || '—'}</span>
@@ -120,7 +168,7 @@ function pressRow(p, { showWork = true } = {}) {
     ? `<a class="press-work" href="${L(`works/${p.work.slug}`)}">→ ${esc(wf(p.work, 'title'))}</a>`
     : about && showWork ? `<span class="press-work muted">${esc(about)}</span>` : '';
   return `
-    <li class="press-row${work ? '' : ' no-work'}">
+    <li class="press-row${work ? '' : ' no-work'}" data-q="${esc(searchText.press(p))}">
       <span class="mono muted press-date">${pressDate(p)}</span>
       <div class="press-main">
         <a class="press-title" href="${p.url}" target="_blank" rel="noopener">${esc(pf(p, 'title'))} <span class="ext">↗</span></a>
@@ -189,8 +237,10 @@ function viewWorks(filter = 'all') {
             ${u.filters[k]} <sup>${WORKS.filter(f).length}</sup>
           </a>`).join('')}
       </div>
+      ${searchBox('works', u.searchWorks)}
     </section>
     <div class="grid">${list.map(workCard).join('')}</div>
+    <p class="search-empty mono muted" hidden>${u.nothingFound}</p>
     <p class="note mono muted">${u.byTheatreNote.replace('{bio}', L('bio'))}</p>`;
 }
 
@@ -350,9 +400,11 @@ function viewPress() {
     <section class="page-head">
       <h1 class="page-title">${u.nav.press}</h1>
       <p class="mono muted">${u.pressCount(PRESS.length)}${u.pressNote ? `<br>${u.pressNote}` : ''}</p>
+      ${searchBox('press', u.searchPress)}
     </section>
+    <p class="search-empty mono muted" hidden>${u.nothingFound}</p>
     ${Object.keys(byYear).sort().reverse().map((y) => `
-      <section class="press-year">
+      <section class="press-year" data-q-group>
         <h2 class="label">${y}</h2>
         <ul class="press-list">${byYear[y].map((p) => pressRow(p)).join('')}</ul>
       </section>`).join('')}`;
@@ -493,6 +545,8 @@ function route() {
   app.classList.remove('fade-in');
   void app.offsetWidth;
   app.classList.add('fade-in');
+
+  bindSearch();
 
   if (work) {
     const el = document.getElementById('player');

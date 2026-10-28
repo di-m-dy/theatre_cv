@@ -201,6 +201,32 @@ main.fade-in { animation: fade .45s ease both; }
 .filters a.is-active { text-decoration: underline; text-underline-offset: 5px; }
 .filters sup { font-size: 9px; }
 
+.search {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 420px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+.search:focus-within { color: var(--fg); border-color: var(--muted); }
+.search input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  outline: 0;
+  padding: 2px 0;
+  color: var(--fg);
+  font: inherit;
+}
+.search input::placeholder { color: var(--muted); opacity: 1; }
+.search input::-webkit-search-cancel-button { filter: invert(1) grayscale(1); opacity: .5; cursor: pointer; }
+.search-empty { margin-top: 32px; }
+[data-q][hidden], [data-q-group][hidden], .search-empty[hidden] { display: none; }
+
 .note { margin-top: 48px; }
 .note a { text-decoration: underline; text-underline-offset: 3px; }
 
