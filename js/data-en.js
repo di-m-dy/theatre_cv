@@ -91,6 +91,7 @@ const EN = {
     'Часть 2': 'Part 2',
     'Часть 3': 'Part 3',
     'Фото из публикации «Петербургского театрального журнала»': 'Photos from Petersburg Theatre Journal',
+    'Фото из публикации «Петербургского театрального журнала» и кадры из видеозаписи': 'Photos from Petersburg Theatre Journal and stills from the recording',
     'Фото из публикации «Культуры Екатеринбурга»': 'Photos from Culture of Yekaterinburg',
     'Фото из публикаций «Культуры Екатеринбурга» и АСИ': 'Photos from Culture of Yekaterinburg and ASI',
     'Фото из публикаций ПТЖ, «Театрала» и «Культуры Екатеринбурга»': 'Photos from PTJ, Teatral and Culture of Yekaterinburg',
