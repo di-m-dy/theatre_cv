@@ -300,6 +300,7 @@ main.fade-in { animation: fade .45s ease both; }
 
 /* ---------- Страница спектакля ---------- */
 
+
 .back { display: inline-block; margin-top: 32px; color: var(--muted); }
 .back:hover { color: var(--fg); }
 .work-head { padding: clamp(24px, 4vw, 48px) 0 clamp(24px, 3vw, 40px); }
@@ -424,7 +425,25 @@ main.fade-in { animation: fade .45s ease both; }
 .press-main { display: grid; gap: 6px; }
 .press-title { font-size: 17px; line-height: 1.35; transition: color .2s; }
 .press-title:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-.press-title .ext { color: var(--muted); font-size: 13px; }
+.press-title .ext, .press-main .ext { color: var(--muted); font-size: 13px; }
+.press-main .ext:hover { color: var(--fg); }
+
+/* ---------- Страница статьи ---------- */
+
+.article { max-width: 820px; }
+.article-head { padding: clamp(24px, 4vw, 48px) 0 8px; display: grid; gap: 18px; justify-items: start; }
+.article-title { margin: 0; font: 300 clamp(26px, 3.6vw, 44px)/1.15 var(--sans); letter-spacing: -0.01em; }
+.article-head .press-work { text-align: left; }
+.article-links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0; font-size: 12px; }
+.article-links a { border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+.article-links a:hover { border-color: var(--fg); }
+.article-block { margin-top: clamp(36px, 4vw, 56px); }
+.article-block > .label { padding-bottom: 12px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
+.quote { margin: 0 0 28px; padding-left: 20px; border-left: 1px solid var(--muted); max-width: 760px; }
+.quote p { margin: 0; font-size: 18px; line-height: 1.5; }
+.quote .quote-orig { margin-top: 10px; font-size: 14px; }
+.article-foot { margin-top: clamp(40px, 5vw, 64px); padding-top: 18px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.article-foot .mono { font-size: 11px; }
 .press-meta { font-size: 11px; }
 .press-work { font-size: 14px; color: var(--muted); text-align: right; }
 a.press-work:hover { color: var(--fg); }

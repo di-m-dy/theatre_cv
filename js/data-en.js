@@ -349,6 +349,10 @@ const UI = {
     portraitAlt: 'Портрет Дмитрия Зимина',
     pressCount: (n) => `${n} материалов · рецензии, интервью, портреты`,
     pressNote: '',
+    article: {
+      back: '← Публикации', original: 'Оригинал', archive: 'Копия в веб-архиве', summary: 'Пересказ', quotes: 'Цитаты',
+      note: 'Пересказ и цитаты подготовлены для сайта. Полный текст — в оригинальной публикации.',
+    },
     searchWorks: 'поиск по названию', searchPress: 'поиск по спектаклю или заголовку', nothingFound: 'Ничего не найдено.',
     notFound: 'Нет такой страницы', toHome: 'На главную →',
     months: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
@@ -376,6 +380,10 @@ const UI = {
     portraitAlt: 'Portrait of Dmitry Zimin',
     pressCount: (n) => `${n} publications · reviews, interviews, profiles`,
     pressNote: 'All publications are in Russian; titles are translated.',
+    article: {
+      back: '← Press', original: 'Original', archive: 'Web Archive copy', summary: 'Summary', quotes: 'Quotes',
+      note: 'Summary and translated quotes prepared for this site. The full text (in Russian) is in the original publication.',
+    },
     searchWorks: 'search by title', searchPress: 'search by production or headline', nothingFound: 'Nothing found.',
     notFound: 'Page not found', toHome: 'Home →',
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],

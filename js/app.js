@@ -161,8 +161,12 @@ function workCard(w) {
     </a>`;
 }
 
+// Пересказ статьи на сайте есть — заголовок ведёт на её страницу, иначе сразу на источник
+const pressText = (p) => (typeof PRESS_TEXT !== 'undefined' && PRESS_TEXT[p.id]) || null;
+const pressMeta = (p) => [pf(p, 'source'), pf(p, 'author'), pf(p, 'kind')].filter(Boolean).map(esc).join(' · ');
+
 function pressRow(p, { showWork = true } = {}) {
-  const meta = [pf(p, 'source'), pf(p, 'author'), pf(p, 'kind')].filter(Boolean).map(esc).join(' · ');
+  const meta = pressMeta(p);
   const about = pf(p, 'about');
   const work = showWork && p.work
     ? `<a class="press-work" href="${L(`works/${p.work.slug}`)}">→ ${esc(wf(p.work, 'title'))}</a>`
@@ -171,7 +175,9 @@ function pressRow(p, { showWork = true } = {}) {
     <li class="press-row${work ? '' : ' no-work'}" data-q="${esc(searchText.press(p))}">
       <span class="mono muted press-date">${pressDate(p)}</span>
       <div class="press-main">
-        <a class="press-title" href="${p.url}" target="_blank" rel="noopener">${esc(pf(p, 'title'))} <span class="ext">↗</span></a>
+        ${pressText(p)
+          ? `<span><a class="press-title" href="${L(`press/${p.id}`)}">${esc(pf(p, 'title'))}</a> <a class="ext" href="${p.url}" target="_blank" rel="noopener" aria-label="${U().article.original}">↗</a></span>`
+          : `<a class="press-title" href="${p.url}" target="_blank" rel="noopener">${esc(pf(p, 'title'))} <span class="ext">↗</span></a>`}
         <span class="mono muted press-meta">${meta}</span>
       </div>
       ${work}
@@ -410,6 +416,47 @@ function viewPress() {
       </section>`).join('')}`;
 }
 
+function viewArticle(id) {
+  const u = U();
+  const p = PRESS_BY_ID[id];
+  const t = p && pressText(p);
+  if (!t) return viewNotFound();
+  const a = u.article;
+  const summary = LANG === 'en' ? t.en : t.ru;
+  const links = `
+    <p class="article-links mono">
+      <a href="${p.url}" target="_blank" rel="noopener">${a.original}: ${esc(pf(p, 'source'))} ↗</a>
+      ${t.archive ? `<a href="${t.archive}" target="_blank" rel="noopener">${a.archive} ↗</a>` : ''}
+    </p>`;
+  return `
+    <a class="back mono" href="${L('press')}">${a.back}</a>
+    <article class="article">
+      <header class="article-head">
+        <p class="mono muted">${pressDate(p)} · ${pressMeta(p)}</p>
+        <h1 class="article-title">${esc(pf(p, 'title'))}</h1>
+        ${p.work ? `<a class="press-work" href="${L(`works/${p.work.slug}`)}">→ ${esc(wf(p.work, 'title'))}</a>` : ''}
+        ${links}
+      </header>
+      <section class="article-block">
+        <h2 class="label">${a.summary}</h2>
+        <div class="rich">${summary.map((x) => `<p>${esc(x)}</p>`).join('')}</div>
+      </section>
+      ${t.quotes && t.quotes.length ? `
+        <section class="article-block">
+          <h2 class="label">${a.quotes}</h2>
+          ${t.quotes.map((q) => `
+            <blockquote class="quote">
+              <p>${esc(LANG === 'en' ? q.en : q.ru)}</p>
+              ${LANG === 'en' ? `<p class="quote-orig muted" lang="ru">${esc(q.ru)}</p>` : ''}
+            </blockquote>`).join('')}
+        </section>` : ''}
+      <footer class="article-foot">
+        <p class="mono muted">${a.note}</p>
+        ${links}
+      </footer>
+    </article>`;
+}
+
 function viewContacts() {
   return `
     <section class="page-head"><h1 class="page-title">${U().nav.contacts}</h1></section>
@@ -525,18 +572,21 @@ function route() {
   const u = U();
   const section = u.nav[parts[0]] ? parts[0] : '';
   const work = parts[0] === 'works' && parts[1] && WORKS.find((x) => x.slug === parts[1]);
+  const article = parts[0] === 'press' && parts[1] && PRESS_BY_ID[parts[1]];
 
   let html;
   if (!parts.length) html = viewHome();
   else if (parts[0] === 'works' && parts[1]) html = viewWork(parts[1]);
   else if (parts[0] === 'works') html = viewWorks(query);
   else if (parts[0] === 'bio') html = viewBio();
+  else if (parts[0] === 'press' && parts[1]) html = viewArticle(parts[1]);
   else if (parts[0] === 'press') html = viewPress();
   else if (parts[0] === 'contacts') html = viewContacts();
   else html = viewNotFound();
 
   const name = person().name;
   if (work) document.title = `${wf(work, 'title')}${work.year ? ` (${work.year})` : ''} — ${name}`;
+  else if (article) document.title = `${pf(article, 'title')} — ${name}`;
   else if (section) document.title = `${u.nav[section]} — ${name}`;
   else document.title = u.siteTitle;
 
