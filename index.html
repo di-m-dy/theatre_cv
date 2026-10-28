@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Дмитрий Зимин — театральный режиссёр</title>
+  <meta name="description" content="Дмитрий Зимин — театральный режиссёр, педагог. Спектакли, видеозаписи, публикации.">
+  <meta property="og:title" content="Дмитрий Зимин — театральный режиссёр">
+  <meta property="og:image" content="assets/img/zimin-portrait.jpg">
+  <meta name="theme-color" content="#0b0b0b">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0b'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='20' fill='%23ece9e3' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@200;400;500&family=IBM+Plex+Sans:wght@300;400&family=Unbounded:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="#/" aria-label="Режиссёр Дмитрий Зимин — на главную">
+      <span class="logo-role">режиссёр</span>
+      <span class="logo-name">[Д&nbsp;ЗИМИН]</span>
+    </a>
+    <nav class="nav" aria-label="Разделы"></nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">[меню]</button>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav aria-label="Разделы"></nav>
+    <div class="mobile-menu-contacts" data-contacts></div>
+  </div>
+
+  <main id="app" tabindex="-1"></main>
+
+  <footer class="site-footer">
+    <span class="footer-copy">© Дмитрий Зимин</span>
+    <span class="footer-links" data-contacts></span>
+  </footer>
+
+  <div class="lightbox" id="lightbox" hidden>
+    <button class="lb-close" aria-label="Закрыть">[закрыть]</button>
+    <button class="lb-prev" aria-label="Предыдущее">←</button>
+    <figure><img alt=""><figcaption></figcaption></figure>
+    <button class="lb-next" aria-label="Следующее">→</button>
+  </div>
+
+  <div class="vmodal" id="vmodal" hidden>
+    <button class="lb-close" aria-label="Закрыть">[закрыть]</button>
+    <div class="vmodal-inner">
+      <p class="vmodal-title mono"></p>
+      <div class="vmodal-player"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js?v=6"></script>
+  <script src="js/data-en.js?v=6"></script>
+  <script src="js/player.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
+</body>
+</html>
