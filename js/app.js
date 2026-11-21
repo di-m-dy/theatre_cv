@@ -600,7 +600,10 @@ function route() {
 
   if (work) {
     const el = document.getElementById('player');
-    if (el) activePlayer = createPlayer(el, { videos: work.videos, poster: work.cover, title: wf(work, 'title') });
+    if (el && work.videos[0].vk) {
+      const v = work.videos[0];
+      el.innerHTML = `<a class="player is-vk" href="https://vkvideo.ru/video${v.vk}?list=${v.list}" target="_blank" rel="noopener" style="position:relative;display:block;aspect-ratio:16/9;background:#000 url('${work.cover}') center/cover"><span class="card-play" aria-hidden="true" style="opacity:1"></span></a>`;
+    } else if (el) activePlayer = createPlayer(el, { videos: work.videos, poster: work.cover, title: wf(work, 'title') });
     const extras = wf(work, 'extras');
     app.querySelectorAll('.gallery-item').forEach((b) =>
       b.addEventListener('click', () => lbOpen(work.gallery, Number(b.dataset.index)))
